@@ -32,6 +32,7 @@ import (
 	"github.com/capitalone/checks-out/remote"
 	"github.com/capitalone/checks-out/router"
 	"github.com/capitalone/checks-out/store/datastore"
+	"github.com/capitalone/checks-out/usage"
 	"github.com/capitalone/checks-out/version"
 
 	"github.com/Sirupsen/logrus"
@@ -67,6 +68,7 @@ func startService() {
 	setLogLevel(envvars.Env.Monitor.LogLevel)
 
 	logstats.Start()
+	usage.Start()
 
 	r := remote.Get()
 	ds := datastore.Get()
@@ -79,7 +81,7 @@ func startService() {
 
 	handler := router.Load()
 
-	logrus.Infof("Starting %s service on %d", envvars.Env.Branding.ShortName, time.Now().Format(time.RFC1123))
+	logrus.Infof("Starting %s service on %s", envvars.Env.Branding.ShortName, time.Now().Format(time.RFC1123))
 
 	if envvars.Env.Server.Cert != "" {
 		logrus.Fatal(
